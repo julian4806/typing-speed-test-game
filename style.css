@@ -7,16 +7,25 @@
 body {
   font-family: "Inter", sans-serif;
   margin: 0;
+  background-color: rgb(211, 211, 211);
 }
 
 .timer {
   position: fixed;
-  left: 10px;
+  left: 20px;
+  top: 20px;
+  border-radius: 5px;
+  padding: 4px;
+  background-color: #c4c4c4;
 }
 
 .score {
   position: fixed;
   right: 20px;
+  top: 20px;
+  border-radius: 5px;
+  padding: 4px;
+  background-color: #c4c4c4;
 }
 
 .container {
@@ -75,6 +84,10 @@ blockquote {
   text-align: center;
 }
 
+.typed-words {
+  color: rgb(0, 145, 0);
+}
+
 figcaption {
   color: #aaa;
   font-size: 14px;
@@ -82,4 +95,30 @@ figcaption {
   margin-bottom: 20px;
   margin-top: 10px;
   text-align: center;
+}
+
+.pulse {
+  animation: pulse-animation 2s 1;
+}
+
+.small-pulse {
+  animation: small-pulse-animation 0.3s 1;
+}
+
+@keyframes small-pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px green;
+  }
+  100% {
+    box-shadow: 0 0 20px 4px transparent;
+  }
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgb(0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 600px 400px transparent;
+  }
 }

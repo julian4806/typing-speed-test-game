@@ -1,6 +1,10 @@
-const $box = document.getElementById("box");
+const container = document.querySelector("blockquote");
+const $box = document.querySelector(".box");
 const $search = document.getElementById("search");
 const timer = document.querySelector(".timer");
+const typedWords = document.querySelector(".typed-words");
+const typedWordsArray = [];
+
 let wordCount = document.querySelector(".score span");
 
 let blocked = false;
@@ -16,6 +20,7 @@ $search.addEventListener("input", (e) => {
   let text = $box.innerText;
 
   if (blocked === false) {
+    timer.classList.add("pulse");
     blocked = true;
     setInterval(() => {
       if (timer.innerText <= 0) {
@@ -38,24 +43,35 @@ $search.addEventListener("input", (e) => {
 
   let spaces = searchText.split(" ").length - 1;
   if (searchText.split(" ")[spaces] === text.split(" ")[spaces]) {
+    container.classList.add("small-pulse");
+    setTimeout(() => {
+      container.classList.remove("small-pulse");
+    }, 100);
     wordCount.innerText++;
-    console.log(wordCount.innerText);
+    typedWordsArray.push(searchText.split(" ")[spaces]);
+
+    typedWords.innerText += searchText.split(" ")[spaces] + " ";
+    $search.value = "";
+    $box.innerText = "";
+    let res = text.replace(
+      new RegExp(typedWordsArray[typedWordsArray.length - 1], "g"),
+      " "
+    );
+    $box.innerText = res;
+    if (text.split(" ").length - 1 < 6) {
+      $box.innerHTML +=
+        " " + words[Math.floor(Math.random() * (words.length - 0 + 1) + 0)];
+    }
+
+    return;
   }
 
   const newText = text.replace(regex, '<mark class="highlight">$&</mark>');
   $box.innerHTML = newText;
-
-  if (searchText === text) {
-    $box.innerHTML = "";
-    $search.value = "";
-    for (let i = 0; i < 6; i++) {
-      $box.innerHTML +=
-        words[Math.floor(Math.random() * (1000 - 0 + 1) + 0)] + " ";
-    }
-  }
 });
 
 function reset() {
-  alert(`wordcount = ${wordCount.innerText}`);
-  location.reload();
+  console.log("done");
+  // alert(`wordcount = ${wordCount.innerText}`);
+  // location.reload();
 }
