@@ -3,9 +3,21 @@ const $box = document.querySelector(".box");
 const $search = document.getElementById("search");
 const timer = document.querySelector(".timer");
 const typedWords = document.querySelector(".typed-words");
+
+const WPMTimer = 20;
+timer.innerHTML = WPMTimer;
+
+//results in modal
+const WPM = document.querySelector(".wpm");
+const finalMistakes = document.querySelector(".amount-of-mistakes");
+const accuracy = document.querySelector(".accuracy");
+const wordCountScoreBoard = document.querySelector(".score span");
+
 const typedWordsArray = [];
 
-let wordCount = document.querySelector(".score span");
+let mistakeCount = 0;
+let succesCount = 0;
+let wordCount = 0;
 
 let blocked = false;
 
@@ -35,18 +47,25 @@ $search.addEventListener("input", (e) => {
   // Wrongletter
   if (searchText.charAt(i) !== text.charAt(i)) {
     $search.style.background = "rgb(251, 165, 165)";
+    mistakeCount++;
+    // console.log(`mistakeCount = ${mistakeCount}`);
     return;
   } else {
+    succesCount++;
+    // console.log(`succesCount = ${succesCount}`);
     $search.style.background = "white";
   }
 
-  // if (searchText === text.split(" ")[0] + " ") { //Extra Space
-  if (searchText === text.split(" ")[0]) {
+  if (searchText === text.split(" ")[0] + " ") {
     container.classList.add("small-pulse");
+    wordCount++;
+    console.log(`wordCount = ${wordCount}`);
+    console.log(`mistakeCount = ${mistakeCount}`);
+    console.log(`succesCount = ${succesCount}`);
     setTimeout(() => {
       container.classList.remove("small-pulse");
     }, 100);
-    wordCount.innerText++;
+    wordCountScoreBoard.innerText = wordCount;
     typedWordsArray.push(searchText);
 
     typedWords.innerText += searchText + " ";
@@ -70,6 +89,12 @@ $search.addEventListener("input", (e) => {
 });
 
 function reset() {
+  WPM.innerText = Math.floor(succesCount / 5 / (WPMTimer / 60)); //WPM
+  finalMistakes.innerText = mistakeCount; //
+  accuracy.innerText = `${Math.floor(
+    100 - (mistakeCount / succesCount) * 100
+  )}%`;
+
   modal.classList.remove("hide-modal");
 
   $search.disabled = true;
@@ -77,11 +102,16 @@ function reset() {
   blocked = false;
   clearInterval(kaas);
 
-  timer.innerText = 1;
+  timer.innerText = WPMTimer;
 
   $search.value = "";
   $search.style.background = "white";
-  wordCount.innerText = 0;
+
+  mistakeCount = 0;
+  succesCount = 0;
+  wordCount = 0;
+  wordCountScoreBoard.innerText = 0;
+
   container.classList.remove("pulse");
   typedWords.innerHTML = "";
 
