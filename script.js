@@ -9,31 +9,30 @@ let wordCount = document.querySelector(".score span");
 
 let blocked = false;
 
+randomWords();
+
 $search.focus();
-for (let i = 0; i < 6; i++) {
-  $box.innerHTML += words[Math.floor(Math.random() * (1000 - 0 + 1) + 0)] + " ";
-}
+
 $search.addEventListener("input", (e) => {
   const searchText = e.target.value;
   let i = searchText.length - 1;
-  const regex = new RegExp(searchText, "g");
+  // const regex = new RegExp(searchText, "g");
+  if (searchText === "") return;
+  const regex = new RegExp(`^${searchText}`, "g");
+
   let text = $box.innerText;
 
+  // Timer
   if (blocked === false) {
     timer.classList.add("pulse");
     blocked = true;
-    setInterval(() => {
-      if (timer.innerText <= 0) {
-        reset();
-        return;
-      } else {
-        timer.innerText--;
-      }
-    }, 1000);
+    kaas = setInterval(setIntervalFunc, 1000);
   }
 
+  // Marktext
   text = text.replace(/(<mark class="highlight">|<\/mark>)/gi, "");
 
+  // Wrongletter
   if (searchText.charAt(i) !== text.charAt(i)) {
     $search.style.background = "rgb(251, 165, 165)";
     return;
@@ -41,26 +40,26 @@ $search.addEventListener("input", (e) => {
     $search.style.background = "white";
   }
 
-  let spaces = searchText.split(" ").length - 1;
-  if (searchText.split(" ")[spaces] === text.split(" ")[spaces]) {
+  // if (searchText === text.split(" ")[0] + " ") { //Extra Space
+  if (searchText === text.split(" ")[0]) {
     container.classList.add("small-pulse");
     setTimeout(() => {
       container.classList.remove("small-pulse");
     }, 100);
     wordCount.innerText++;
-    typedWordsArray.push(searchText.split(" ")[spaces]);
+    typedWordsArray.push(searchText);
 
-    typedWords.innerText += searchText.split(" ")[spaces] + " ";
+    typedWords.innerText += searchText + " ";
     $search.value = "";
     $box.innerText = "";
     let res = text.replace(
       new RegExp(typedWordsArray[typedWordsArray.length - 1], "g"),
-      " "
+      ""
     );
     $box.innerText = res;
     if (text.split(" ").length - 1 < 6) {
       $box.innerHTML +=
-        " " + words[Math.floor(Math.random() * (words.length - 0 + 1) + 0)];
+        " " + words[Math.floor(Math.random() * words.length + 0)];
     }
 
     return;
@@ -71,7 +70,46 @@ $search.addEventListener("input", (e) => {
 });
 
 function reset() {
-  console.log("done");
-  // alert(`wordcount = ${wordCount.innerText}`);
-  // location.reload();
+  modal.classList.remove("hide-modal");
+
+  $search.disabled = true;
+
+  blocked = false;
+  clearInterval(kaas);
+
+  timer.innerText = 1;
+
+  $search.value = "";
+  $search.style.background = "white";
+  wordCount.innerText = 0;
+  container.classList.remove("pulse");
+  typedWords.innerHTML = "";
+
+  randomWords();
+}
+
+// MODAL
+const modal = document.querySelector(".modal");
+const closeBtn = document.querySelector(".close-btn");
+
+closeBtn.addEventListener("click", () => {
+  modal.classList.toggle("hide-modal");
+  $search.disabled = false;
+  $search.focus();
+});
+
+function randomWords() {
+  $box.innerHTML = "";
+  for (let i = 0; i < 6; i++) {
+    $box.innerHTML += words[Math.floor(Math.random() * words.length + 0)] + " ";
+  }
+}
+
+function setIntervalFunc() {
+  if (timer.innerText <= 0) {
+    reset();
+    return;
+  } else {
+    timer.innerText--;
+  }
 }

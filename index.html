@@ -14,7 +14,7 @@
 <body>
 
     <div class="timer">
-        60
+        1
     </div>
     <div class="score">
         wordcount: <span>0</span>
@@ -23,7 +23,8 @@
     <div class="container">
         <div class="search-container">
             <label for="search">Typing speed test</label>
-            <input id="search" placeholder="Typing speed test" type="search" autocomplete="off" />
+            <input id="search" placeholder="Typing speed test" type="search" autocomplete="off" onpaste="return false"
+                oncontextmenu="return false;" />
         </div>
 
         <figure>
@@ -33,5 +34,20 @@
         </figure>
     </div>
 </body>
+
+
+<div class="modal hide-modal">
+    <div class="modal-content">
+        <div class="stats">
+            <div>Well done! Your WPM is: <span>120</span></div>
+            <div>You've made <span>60</span> mistakes</div>
+            <div>Your accuracy is <span>50%</span></div>
+            <button class="close-btn">Replay</button>
+        </div>
+    </div>
+</div>
+
+</body>
+
 
 </html>
